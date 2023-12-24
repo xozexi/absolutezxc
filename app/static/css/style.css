@@ -1,4 +1,24 @@
+@font-face {
+  font-family: 'monocraft';
+  src: url('fonts/Monocraft.otf') format('otf');
+  /* добавьте другие форматы, если необходимо (eot, ttf, svg, etc.) */
+}
+
 body{
     background: #212121;
-    font-family: 'Exo 2', sans-serif;
+    /*font-family: 'Exo 2', sans-serif;*/
+    font-family: 'monocraft', sans-serif;
+}
+
+/* Общие стили */
+.spacer {
+  /* Общие свойства для всех размеров экранов */
+  margin-top: 200px;
+}
+
+/* Медиазапрос для изменения свойства на мобильных устройствах (ширина экрана до 600px) */
+@media only screen and (max-width: 768px) {
+  .spacer {
+    margin-top: 50px;
+  }
 }

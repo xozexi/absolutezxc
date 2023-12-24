@@ -5,16 +5,20 @@
 <!--{% block header %}Добро пожаловать на главную страницу{% endblock %}-->
 
 {% block content %}
+<div class="spacer"></div>
 <div class="container mt-5">
     <div class="row">
         <div class="col-xl-6 col-lg-7">
         <p class="fs-1 text-light">УНИВЕРСАЛЬНАЯ соц. Сеть</p>
-        <p class="fs-3 text-muted">С новой ситемой рейтинга, где ваши взаимодействия и
+        <p class="fs-3" style="color: #818181">С новой ситемой рейтинга, где ваши взаимодействия и
             активность превращаются в ценные опытные очки!
             Здесь каждый ваш пост, комментарий или лайк
             не только отражает вашу личность, но и
             добавляет вам ценные очки.</p>
             </div>
+        <div class="col-xl-6 col-lg-5 d-flex justify-content-center">
+            <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="LOGO" style="object-fit: cover; object-fit: cover; box-shadow: 0px 0px 30px 10px rgba(85,0,255,0.54);">
+        </div>
     </div>
 </div>
 {% endblock %}
