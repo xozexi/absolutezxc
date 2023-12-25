@@ -7,17 +7,82 @@
 {% block content %}
 <div class="spacer"></div>
 <div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 text-center">
+            <p class="ex-txt" style="font-size: 9vw">EXPERIENCE+</p>
+        </div>
+
+    </div>
+    <hr class="def-hr" style="width: 50%; margin-left: auto; margin-right: auto">
+    <div class="spacer"/>
     <div class="row">
         <div class="col-xl-6 col-lg-7">
-        <p class="fs-1 text-light">УНИВЕРСАЛЬНАЯ соц. Сеть</p>
-        <p class="fs-3" style="color: #818181">С новой ситемой рейтинга, где ваши взаимодействия и
-            активность превращаются в ценные опытные очки!
-            Здесь каждый ваш пост, комментарий или лайк
-            не только отражает вашу личность, но и
-            добавляет вам ценные очки.</p>
-            </div>
+            <p class="fs-1 text-light">УНИВЕРСАЛЬНАЯ соц. Сеть</p>
+            <p class="fs-3" style="color: #818181">С новой ситемой рейтинга, где ваши взаимодействия и
+                активность превращаются в ценные опытные очки!
+                Здесь каждый ваш пост, комментарий или лайк
+                не только отражает вашу личность, но и
+                добавляет вам ценные очки <span class="ex-txt fs-1">Ex</span>.</p>
+        </div>
         <div class="col-xl-6 col-lg-5 d-flex justify-content-center">
-            <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="LOGO" style="object-fit: cover; object-fit: cover; box-shadow: 0px 0px 30px 10px rgba(85,0,255,0.54);">
+            <img src="{{ url_for('static', filename='imgs/logo.png') }}" id="main-logo" alt="LOGO"
+                 style="object-fit: cover; object-fit: cover; box-shadow: 0px 0px 30px 10px rgba(85,0,255,0.54);">
+        </div>
+    </div>
+</div>
+<div class="spacer"></div>
+<hr class="def-hr">
+<div class="spacer"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-6 col-md-6 d-flex justify-content-center">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('login') }}">
+                <button class="ex-btn" disabled>Войти <i class="bi bi-stars"></i></button>
+            </a>
+            {% else %}
+            <a href="{{ url_for('login') }}">
+                <button class="ex-btn">Войти <i class="bi bi-stars"></i></button>
+            </a>
+            {% endif %}
+        </div>
+        <div class="col-xl-6 col-md-6 d-flex justify-content-center">
+            <a href="{{ url_for('register') }}">
+                <button class="ex-btn">Регистрация</button>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="spacer" style="margin-top: 150px"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-4 col-lg-4 col-5">
+            <p class="fs-3" style="color: #818181">Система Ex</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="bar-border">
+                <div class="bar" id="bar"></div>
+            </div>
+        </div>
+        <div class="col-4">
+            <span class="fs-3" id="ex_value" style="color: #818181">20</span>
+            <span class="fs-3" id="slash" style="color: #818181">/</span>
+            <span class="fs-3" id="ex_end_value" style="color: #818181">100</span>
+            <span class="fs-1 ex-txt" id="ex_end"> Ex</span>
+            <span class="fs-1" id="lvl" style="color: #bbbbbb">411</span>
+
+            <span class="fs-1" id="lvl_txt" style="color: #bbbbbb">LvL</span>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <p class="fs-3" style="color: #818181">При получении Лайков или комментариев под своими постави вы будете
+                получать очки Ex
+                которые будут влиять </p>
         </div>
     </div>
 </div>

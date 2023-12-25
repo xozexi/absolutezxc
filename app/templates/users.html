@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="spacer"></div>
+    <div class="row d-flex justify-content-center" style="border: #212121 solid 5px; padding: 2vw 3vw">
+        <div class="col-12 text-center">
+            <h3 class="title text-light" style="font-size: 3.3vw;">Авторизация</h3>
+            <div class="spacer"></div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <ul>
+                {% for user in users %}
+                <li>{{ user.username }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="spacer"></div>
+{% endblock %}

@@ -4,16 +4,94 @@
   /* добавьте другие форматы, если необходимо (eot, ttf, svg, etc.) */
 }
 
+.navbar{
+  background: #5500e1;
+}
+
+.ex-txt{
+  color: #5500e1;
+}
+
+input[type="email"], input[type="password"], input[type="text"]{
+  font-size: 3vw;
+  background: black;
+  border: #5500e1 solid 3px;
+  outline: none;
+  color: #5500e1;
+  !important;
+}
+
+/* Скрыть стандартные полосы прокрутки */
+::-webkit-scrollbar {
+  width: 0.5em; /* Ширина полосы прокрутки */
+}
+
+/* Стили для трека (фона) прокрутки */
+::-webkit-scrollbar-track {
+  background: #252525; /* Прозрачный фон трека */
+}
+
+/* Стили для невидимой ручки (бегунка) прокрутки */
+::-webkit-scrollbar-thumb {
+  background-color: #5500e1; /* Прозрачный цвет ручки */
+  border: none; /* Убрать границу */
+}
+
+/* Дополнительные стили, если нужно убрать совсем */
+::-webkit-scrollbar-button {
+  display: none; /* Убрать кнопки прокрутки */
+}
+
 body{
-    background: #212121;
+    background: #181818;
     /*font-family: 'Exo 2', sans-serif;*/
     font-family: 'monocraft', sans-serif;
+}
+
+.bar{
+  height: 20px;
+  background: #4c15ec;
+  transition: width 0.3s;
+}
+
+
+.bar-border{
+  border: solid #5500e1 1px;
 }
 
 /* Общие стили */
 .spacer {
   /* Общие свойства для всех размеров экранов */
-  margin-top: 200px;
+  margin-top: 100px;
+}
+
+.def-hr{
+  height: 5px;
+  background: whitesmoke;
+}
+
+.ex-btn{
+  height: 100px;
+  width: 280px;
+  border: solid #5500e1 3px;
+  padding: 5px 10px;
+  font-size: 30px;
+  background: transparent;
+  color: #b99dff;
+  transition: 0.3s;
+}
+
+.ex-btn:hover{
+  background: #5500e1;
+}
+
+#lvl{
+  border: solid  #5500e1 5px;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  vertical-align: center;
+  padding: 5px 10px;
 }
 
 /* Медиазапрос для изменения свойства на мобильных устройствах (ширина экрана до 600px) */
@@ -22,3 +100,10 @@ body{
     margin-top: 50px;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  #main-logo {
+    width: 50%;
+  }
+}
+
