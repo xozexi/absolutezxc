@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
-    level = db.Column(db.Integer(), default=0)
+    level = db.Column(db.Integer(), default=1)
     exp = db.Column(db.Integer(), default=0)
     active = db.Column(db.Boolean())
     roles = db.relationship('Role', secondary='user_roles')

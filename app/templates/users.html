@@ -5,21 +5,32 @@
     <div class="spacer"></div>
     <div class="row d-flex justify-content-center" style="border: #212121 solid 5px; padding: 2vw 3vw">
         <div class="col-12 text-center">
-            <h3 class="title text-light" style="font-size: 3.3vw;">Авторизация</h3>
+            <h3 class="title text-light" style="font-size: 3.3vw;">Пользователи</h3>
             <div class="spacer"></div>
         </div>
-    </div>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-12 text-center">
-            <ul>
-                {% for user in users %}
-                <li>{{ user.username }}</li>
-                {% endfor %}
-            </ul>
+
+        {% for user in users %}
+        <div class="col-12 text-center user-list d-flex justify-content-left">
+               <span class="text-light fs-3" > {{ user.username }}</span>
+            <span class="text-light fs-3" style="height: 40px; width: 40px; margin-left: 20px; color: #bbbbbb; box-shadow: 0px 0px 0px 5px #5500e1">{{ user.level }}</span>
+            <div class="bar-border" style="margin-left: 20px; height: 30px; width: 40%">
+                <div class="bar" style="width: {{user.exp/(100*(user.level**2))*100 }}%"></div>
+            </div>
+            <span class="fs-3" style="color: #818181; margin-left: 10px">{{ user.exp }}</span>
+            <span class="fs-3" style="color: #818181">/</span>
+            <span class="fs-3" style="color: #818181">{{ (100*(user.level**2)) }}</span>
+            <span class="fs-3 ex-txt" id="ex_end"> Ex</span>
+
         </div>
+        {% endfor %}
+
     </div>
 </div>
 <div class="spacer"></div>
+
+<script>
+    {% for user in users %}
+    console.log("{{ user.username }} {{ user.level }} {{ user.exp }} {{ (100*(user.level**2)) }} {{ user.exp/(100*(user.level**2))*100 }}%");
+    {% endfor %}
+</script>
 {% endblock %}

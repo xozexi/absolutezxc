@@ -1,109 +1,136 @@
 @font-face {
-  font-family: 'monocraft';
-  src: url('fonts/Monocraft.otf') format('otf');
-  /* добавьте другие форматы, если необходимо (eot, ttf, svg, etc.) */
+    font-family: 'monocraft';
+    src: url('fonts/Monocraft.otf') format('otf');
+    /* добавьте другие форматы, если необходимо (eot, ttf, svg, etc.) */
 }
 
-.navbar{
-  background: #5500e1;
+.navbar {
+    background: #5500e1;
 }
 
-.ex-txt{
-  color: #5500e1;
+.ex-txt {
+    color: #5500e1;
 }
 
-input[type="email"], input[type="password"], input[type="text"]{
-  font-size: 3vw;
-  background: black;
-  border: #5500e1 solid 3px;
-  outline: none;
-  color: #5500e1;
-  !important;
+input[type="email"], input[type="password"], input[type="text"] {
+    font-size: 3vw;
+    background: black;
+    border: #5500e1 solid 3px;
+    outline: none;
+    color: #5500e1;
+!important;
 }
 
 /* Скрыть стандартные полосы прокрутки */
 ::-webkit-scrollbar {
-  width: 0.5em; /* Ширина полосы прокрутки */
+    width: 0.5em; /* Ширина полосы прокрутки */
 }
 
 /* Стили для трека (фона) прокрутки */
 ::-webkit-scrollbar-track {
-  background: #252525; /* Прозрачный фон трека */
+    background: #252525; /* Прозрачный фон трека */
 }
 
 /* Стили для невидимой ручки (бегунка) прокрутки */
 ::-webkit-scrollbar-thumb {
-  background-color: #5500e1; /* Прозрачный цвет ручки */
-  border: none; /* Убрать границу */
+    background-color: #5500e1; /* Прозрачный цвет ручки */
+    border: none; /* Убрать границу */
 }
 
 /* Дополнительные стили, если нужно убрать совсем */
 ::-webkit-scrollbar-button {
-  display: none; /* Убрать кнопки прокрутки */
+    display: none; /* Убрать кнопки прокрутки */
 }
 
-body{
+body {
     background: #181818;
     /*font-family: 'Exo 2', sans-serif;*/
     font-family: 'monocraft', sans-serif;
 }
 
-.bar{
-  height: 20px;
-  background: #4c15ec;
-  transition: width 0.3s;
+.bar {
+    height: 20px;
+    background: #4c15ec;
+    transition: width 0.3s;
+}
+
+.user-list {
+    padding: 20px 20px;
+  margin: 2em auto;
+  box-shadow:   -5px 0 0 0 #5500e1,
+                 5px 0 0 0 #5500e1,
+                 0 -5px 0 0 #5500e1,
+                 0 5px 0 0 #5500e1;
+    transition: .5s;
+}
+
+.user-list:hover {
+    background: rgba(85, 0, 225, 0.43);
+    box-shadow: 5px 5px 0px 2px #0c0c0c;
 }
 
 
-.bar-border{
-  border: solid #5500e1 1px;
+.mini-prof {
+    text-align: center;
+    border: solid #715d8c 2px;
+    width: 25px;
+    height: 25px;
+    transition: .5s;
+}
+
+.mini-prof:hover {
+    background: #715d8c;
+}
+
+.bar-border {
+    border: solid #5500e1 5px;
 }
 
 /* Общие стили */
 .spacer {
-  /* Общие свойства для всех размеров экранов */
-  margin-top: 100px;
+    /* Общие свойства для всех размеров экранов */
+    margin-top: 100px;
 }
 
-.def-hr{
-  height: 5px;
-  background: whitesmoke;
+.def-hr {
+    height: 5px;
+    background: whitesmoke;
 }
 
-.ex-btn{
-  height: 100px;
-  width: 280px;
-  border: solid #5500e1 3px;
-  padding: 5px 10px;
-  font-size: 30px;
-  background: transparent;
-  color: #b99dff;
-  transition: 0.3s;
+.ex-btn {
+    height: 100px;
+    width: 280px;
+    border: solid #5500e1 3px;
+    padding: 5px 10px;
+    font-size: 30px;
+    background: transparent;
+    color: #b99dff;
+    transition: 0.3s;
 }
 
-.ex-btn:hover{
-  background: #5500e1;
+.ex-btn:hover {
+    background: #5500e1;
 }
 
-#lvl{
-  border: solid  #5500e1 5px;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  vertical-align: center;
-  padding: 5px 10px;
+#lvl {
+    border: solid #5500e1 5px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    vertical-align: center;
+    padding: 5px 10px;
 }
 
 /* Медиазапрос для изменения свойства на мобильных устройствах (ширина экрана до 600px) */
 @media only screen and (max-width: 768px) {
-  .spacer {
-    margin-top: 50px;
-  }
+    .spacer {
+        margin-top: 50px;
+    }
 }
 
 @media only screen and (max-width: 768px) {
-  #main-logo {
-    width: 50%;
-  }
+    #main-logo {
+        width: 50%;
+    }
 }
 

@@ -31,13 +31,13 @@ function animateLvl() {
     var endLevelElement = document.getElementById('ex_end_value');
 
     // Устанавливаем начальное значение
-    var level = 0;
+    var level = 1;
 
     // Функция для увеличения значения и обновления элемента
     function incrementLevel() {
         level++;
         levelElement.textContent = level;
-        endLevelElement.textContent = 100*(level*0.5);
+        endLevelElement.textContent = 100*Math.pow(level,2);
     }
 
     // Устанавливаем интервал вызова функции каждую секунду

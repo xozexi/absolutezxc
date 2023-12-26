@@ -32,19 +32,18 @@
 </div>
 <div class="spacer"></div>
 <hr class="def-hr">
+{% if current_user.is_authenticated %}
+<!--pass-->
+{% else %}
 <div class="spacer"></div>
 <div class="container">
     <div class="row">
         <div class="col-xl-6 col-md-6 d-flex justify-content-center">
-            {% if current_user.is_authenticated %}
-            <a href="{{ url_for('login') }}">
-                <button class="ex-btn" disabled>Войти <i class="bi bi-stars"></i></button>
-            </a>
-            {% else %}
+
             <a href="{{ url_for('login') }}">
                 <button class="ex-btn">Войти <i class="bi bi-stars"></i></button>
             </a>
-            {% endif %}
+
         </div>
         <div class="col-xl-6 col-md-6 d-flex justify-content-center">
             <a href="{{ url_for('register') }}">
@@ -53,16 +52,17 @@
         </div>
     </div>
 </div>
+{% endif %}
 <div class="spacer" style="margin-top: 150px"></div>
 <div class="container">
     <div class="row">
         <div class="col-xl-4 col-lg-4 col-5">
-            <p class="fs-3" style="color: #818181">Система Ex</p>
+            <p class="fs-3" style="color: #818181">Система <span class="ex-txt  fs-1">Ex</span></p>
         </div>
     </div>
     <div class="row">
         <div class="col-8">
-            <div class="bar-border">
+            <div class="bar-border mt-3">
                 <div class="bar" id="bar"></div>
             </div>
         </div>
@@ -71,18 +71,20 @@
             <span class="fs-3" id="slash" style="color: #818181">/</span>
             <span class="fs-3" id="ex_end_value" style="color: #818181">100</span>
             <span class="fs-1 ex-txt" id="ex_end"> Ex</span>
-            <span class="fs-1" id="lvl" style="color: #bbbbbb">411</span>
-
+        </div>
+        <div class="col-4">
+            <span class="fs-1" id="lvl" style="color: #bbbbbb">0</span>
             <span class="fs-1" id="lvl_txt" style="color: #bbbbbb">LvL</span>
         </div>
     </div>
 </div>
+<div class="spacer"></div>
 <div class="container">
     <div class="row">
         <div class="col-12">
             <p class="fs-3" style="color: #818181">При получении Лайков или комментариев под своими постави вы будете
-                получать очки Ex
-                которые будут влиять </p>
+                получать очки <span class="ex-txt  fs-1">Ex</span>
+                которые будут влиять на ваше продвижение, охват и рейтинг.</p>
         </div>
     </div>
 </div>

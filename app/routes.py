@@ -20,7 +20,6 @@ from app.models import db, User, Role, Post, Comment, Like
 
 
 @app.route('/')
-@login_required
 def index():
     return render_template('index.html')
 
@@ -46,7 +45,7 @@ def login():  # define login page fucntion
             return redirect(url_for('login'))  # if the user doesn't exist or password is wrong, reload the page
         # if the above check passes, then we know the user has the right credentials
         print(f"login {user.username} {user.password} {user.level} {user.exp} {user.active}")
-        login_user(user)
+        login_user(user, remember=True)
         print(f"{current_user.is_authenticated} {current_user.is_active}")
         if current_user.is_authenticated:
             print(current_user.username)
