@@ -1,6 +1,7 @@
 import os
 import shutil
 import re
+from datetime import time
 from urllib.parse import urlparse, urljoin
 from functools import wraps
 from flask import render_template, redirect, url_for, request, flash, session
@@ -9,7 +10,7 @@ from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
 # from flask_login import login_user, login_required, logout_user, current_user
 # from flask_socketio import SocketIO, send, join_room
-
+import datetime
 # from app import defs, user_datastore
 from wtforms import BooleanField, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
@@ -57,7 +58,6 @@ def login():  # define login page fucntion
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-
     # Проверка, если пользователь уже аутентифицирован, перенаправить его на главную страницу
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -106,15 +106,35 @@ def users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
+
 # Пример другого маршрута
 @app.route('/about')
 def about():
     return render_template('about.html')
 
 
+@app.route('/add-post', methods=['GET', 'POST'])
+@login_required
+def add_post():
+    if request.method == 'POST':
+        try:
+            title = request.form.get('title')
+            content = request.form.get('content')
+            post = Post(title=title, content=content, user_id=current_user.id, pub_date=datetime.datetime.now())
+            db.session.add(post)
+            db.session.commit()
+            return redirect(url_for('get_user', username=current_user.username))
+        except Exception as e:
+            flash("Ошибка при добавлении поста")
+            print(e)
+            return redirect(url_for('add_post'))
+    else:
+        return render_template('new_post.html')
+
+
 @app.route('/user/<string:username>')
 @login_required
 def get_user(username):
-    # Здесь вы можете использовать user_id для получения информации о пользователе из базы данных или других источников данных
-    # return f'User ID: {user_id}'
-    return render_template('user_profile.html', username=username)
+    user = User.query.filter_by(username=username).first()
+    posts = Post.query.filter_by(user_id=user.id).all()
+    return render_template('user_profile.html', User=user, Posts=posts)

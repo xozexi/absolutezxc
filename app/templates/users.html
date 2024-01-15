@@ -13,7 +13,7 @@
         <a href="{{ url_for('get_user', username=user.username) }}" class="col-12 text-center" style="text-decoration: none;">
         <div class="col-12 text-center user-list d-flex justify-content-left">
                <span class="text-light fs-3" > {{ user.username }}</span>
-            <span class="text-light fs-3" style="height: 40px; width: 40px; margin-left: 20px; color: #bbbbbb; box-shadow: 0px 0px 0px 5px #5500e1">{{ user.level }}</span>
+            <span class="text-light fs-3" style="height: 40px; min-width: 40px; margin-left: 20px; color: #bbbbbb; box-shadow: 0px 0px 0px 5px #5500e1">{{ user.level }}</span>
             <div class="bar-border" style="margin-left: 20px; height: 30px; width: 40%">
                 <div class="bar" style="width: {{user.exp/(100*(user.level**2))*100 }}%"></div>
             </div>

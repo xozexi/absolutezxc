@@ -4,26 +4,50 @@
 <div class="container">
     <div class="spacer"></div>
     <div class="row d-flex justify-content-center" style="border: #212121 solid 5px; padding: 2vw 3vw">
-        <div class="col-12 text-center">
-            <h3 class="title text-light" style="font-size: 3.3vw;">{{ username }}</h3>
-            <div class="spacer"></div>
-        </div>
-
-        {% for user in users %}
-        <div class="col-12 text-center user-list d-flex justify-content-left">
-               <span class="text-light fs-3" > {{ user.username }}</span>
-            <span class="text-light fs-3" style="height: 40px; width: 40px; margin-left: 20px; color: #bbbbbb; box-shadow: 0px 0px 0px 5px #5500e1">{{ user.level }}</span>
-            <div class="bar-border" style="margin-left: 20px; height: 30px; width: 40%">
-                <div class="bar" style="width: {{user.exp/(100*(user.level**2))*100 }}%"></div>
+        <div class="row">
+            <div class="col-12 text-center">
+                {% if User.username == current_user.username %}
+                <span class="fs-1 title text-light">{{ User.username }} (Вы)</span>
+                {% else %}
+                <span class="fs-1 title text-light">{{ User.username }}</span>
+                {% endif %}
             </div>
-            <span class="fs-3" style="color: #818181; margin-left: 10px">{{ user.exp }}</span>
-            <span class="fs-3" style="color: #818181">/</span>
-            <span class="fs-3" style="color: #818181">{{ (100*(user.level**2)) }}</span>
-            <span class="fs-3 ex-txt" id="ex_end"> Ex</span>
-
+            <hr class="def-hr" style="width: 50%; margin-left: auto; margin-right: auto; background: #4c15ec;
+            border-color: #4c15ec; opacity: 100%">
+            <div class="col-8 text-center">
+                <span class="fs-1" id="lvl" style="color: #bbbbbb;">
+                    {{  User.level }}
+                </span>
+                <span class="text-light fs-1">
+                    LvL
+                </span>
+            </div>
+            <div class="col-4">
+                <span class="ex-txt fs-1">{{ User.exp }} Ex</span>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        {% if User.username == current_user.username %}
+        <a class="nav-link text-center" style="justify-content: flex-end;" href="{{ url_for('add_post') }}">
+            <div class="a-link">
+                <span class="fs-1">+ ПОСТ</span>
+            </div>
+        </a>
+        {% else %}
+        <span class="fs-2 text-center text-light">
+            ПОСТЫ
+        </span>
+        {% endif %}
+        <hr class="def-hr">
+        {% if Posts|count == 0 %}
+            <span class="ex-post-txt fs-4">Э. А где?</span>
+        {% endif %}
+        {% for post in Posts %}
+        <div class="row">
+            <span class="ex-title fs-2">{{ post.title }}</span><br>
+            <span class="ex-post-txt fs-4">{{ post.content }}</span><br>
         </div>
         {% endfor %}
-
     </div>
 </div>
 <div class="spacer"></div>

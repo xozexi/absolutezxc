@@ -20,7 +20,27 @@ a, a:focus{
     color: #5500e1;
 }
 
-input[type="email"], input[type="password"], input[type="text"] {
+.ex-title {
+    color: #773de0;
+}
+
+.ex-post-txt{
+    color: #868686;
+}
+
+.a-link{
+    border: #773de0 solid 3px;
+    color: #773de0;
+    transition: .5s;
+}
+
+.a-link:hover{
+    border: #5500e1 solid 3px;
+    color: #5500e1;
+    transition: .5s;
+}
+
+input[type="email"], input[type="password"], input[type="text"], textarea {
     font-size: 3vw;
     background: black;
     border: #5500e1 solid 3px;
