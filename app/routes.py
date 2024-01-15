@@ -8,7 +8,7 @@ from flask_security import LoginForm
 from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
 # from flask_login import login_user, login_required, logout_user, current_user
-from flask_socketio import SocketIO, send, join_room
+# from flask_socketio import SocketIO, send, join_room
 
 # from app import defs, user_datastore
 from wtforms import BooleanField, PasswordField, StringField, SubmitField
@@ -110,3 +110,11 @@ def users():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+
+@app.route('/user/<string:username>')
+@login_required
+def get_user(username):
+    # Здесь вы можете использовать user_id для получения информации о пользователе из базы данных или других источников данных
+    # return f'User ID: {user_id}'
+    return render_template('user_profile.html', username=username)

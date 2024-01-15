@@ -4,6 +4,14 @@
     /* добавьте другие форматы, если необходимо (eot, ttf, svg, etc.) */
 }
 
+html{
+    cursor: url("../imgs/cursor.png"), auto;
+}
+
+a, a:focus{
+    cursor: url("../imgs/cursor.png"), auto;
+}
+
 .navbar {
     background: #5500e1;
 }
