@@ -137,7 +137,7 @@ def add_post():
 def get_user(username):
     user = User.query.filter_by(username=username).first()
     posts = Post.query.filter_by(user_id=user.id).order_by(Post.id.desc()).all()
-    
+
     likes = {}
     for post in posts:
         liked_by_user = False
@@ -162,10 +162,12 @@ def like_post(post_id):
         if existing_like:
             db.session.delete(existing_like)
             is_like_set = False
+            User.query.get(Post.query.get(post_id).user_id).exp -= 1
         else:
             new_like = Like(user_id=current_user.id, post_id=post_id)
             db.session.add(new_like)
             is_like_set = True
+            User.query.get(Post.query.get(post_id).user_id).exp += 1
 
         db.session.commit()
 
@@ -176,6 +178,60 @@ def like_post(post_id):
     except Exception as e:
         print(f"Error: {str(e)}")
         return '', 500
+
+
+@app.route('/comments/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def get_comments(post_id):
+    comments = Comment.query.filter_by(post_id=post_id).all()
+    return render_template('comments.html', Users=User, Comments=comments, post_id=post_id)
+
+
+@app.route('/add_comment/<int:post_id>', methods=['POST'])
+@login_required
+def add_comment(post_id):
+    try:
+        new_comment = Comment(text=request.form.get('text_comm'),
+                              user_id=current_user.id,
+                              post_id=post_id,
+                              pub_date=datetime.datetime.now())
+        db.session.add(new_comment)
+        db.session.commit()
+        flash("")
+        return render_template(url_for('get_comments', post_id=post_id))
+    except:
+        flash("Ошибка при добавлении комментария")
+        return redirect(url_for('get_comments', post_id=post_id))
+
+
+@app.route('/delete_comment/<int:comment_id>')
+@login_required
+def delete_comment(comment_id):
+    try:
+        comment = Comment.query.get(comment_id)
+        db.session.delete(comment)
+        db.session.commit()
+        return redirect(url_for('get_comments', post_id=comment.post_id))
+    except:
+        flash("Ошибка при удалении комментария")
+        return redirect(url_for('get_comments', post_id=comment.post_id))
+
+
+@app.route('/get_exp', methods=['GET'])
+def get_exp():
+    try:
+        # Получаем id пользователя из запроса
+        user_id = request.args.get('userId')
+
+        # Находим пользователя по id в базе данных
+        user = User.query.get(user_id)
+
+        # Возвращаем значение exp в формате JSON
+        print(user.exp)
+        return jsonify({'exp': user.exp})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 
 def get_post_likes(post_id):
     try:

@@ -2,6 +2,7 @@
 console.log("script js")
 console.log(window.location.pathname)
 
+
 // Проверяем, находится ли скрипт на странице / (главной странице)
 
 function animateBar() {
@@ -37,7 +38,7 @@ function animateLvl() {
     function incrementLevel() {
         level++;
         levelElement.textContent = level;
-        endLevelElement.textContent = 100*Math.pow(level,2);
+        endLevelElement.textContent = 100 * Math.pow(level, 2);
     }
 
     // Устанавливаем интервал вызова функции каждую секунду
@@ -76,4 +77,49 @@ animateNumber(100);
 if (window.location.pathname === "/") {
     animateBar();
     animateLvl();
+}
+
+
+    function updateExpValue(userId, DOMElementID, userLvl) {
+    // Переменная для отслеживания времени (в миллисекундах)
+    console.log(userId + " " + $('#' + DOMElementID).text());
+    // Запускаем цикл обновления каждые 5 секунд
+    var intervalId = setInterval(function () {
+        // Получаем текущее время
+        var currentTime = new Date().getTime();
+
+        // Если не прошло 5 секунд, обновляем значение поля DOM объекта
+
+        // Получаем значение exp из пользователя с указанным id
+        // Это может потребовать использования AJAX-запроса к серверу, чтобы получить актуальное значение exp
+
+        // Здесь предполагается, что вы имеете функцию, которая выполняет AJAX-запрос к серверу для получения значения exp по id пользователя
+        getExpValueFromServer(userId)
+            .then(function (expValue) {
+                $('#' + DOMElementID).text(expValue);
+                $('#' + DOMElementID + 'bar').width(expValue/(100*(userLvl**2))*100 +'%');
+                // Дальнейшая обработка значения expValue
+            })
+            .catch(function (error) {
+            });
+
+    }, 1000); // Проверка каждую секунду
+}
+
+// Пример функции для выполнения AJAX-запроса
+function getExpValueFromServer(userId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/get_exp',
+            method: 'GET',
+            data: {userId: userId},
+            async: true,
+            success: function (data) {
+                resolve(data.exp);
+            },
+            error: function () {
+                reject('Failed to get exp value from the server');
+            }
+        });
+    });
 }

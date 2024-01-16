@@ -40,12 +40,46 @@ a, a:focus{
     transition: .5s;
 }
 
-input[type="email"], input[type="password"], input[type="text"], textarea {
-    font-size: 3vw;
-    background: black;
+/*input[type="email"], input[type="password"], input[type="text"], textarea {*/
+/*    font-size: 2vw;*/
+/*    background: #0c0c0c;*/
+/*    border: #5500e1 solid 3px;*/
+/*    outline: none;*/
+/*    color: #5500e1;*/
+/*}*/
+
+/* Общие стили для всех размеров экрана */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+textarea,
+    dynamic-vw {
+    background: #0c0c0c;
     border: #5500e1 solid 3px;
     outline: none;
     color: #5500e1;
+}
+
+/* Стили для экранов шириной 600px и более (пк) */
+@media screen and (min-width: 600px) {
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    textarea,
+    dynamic-vw{
+        font-size: 2vw;
+    }
+}
+
+/* Стили для экранов шириной менее 600px (мобильные устройства) */
+@media screen and (max-width: 599px) {
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    textarea,
+    dynamic-vw {
+        font-size: 4vw; /* Или любой другой размер шрифта для мобильных устройств */
+    }
 }
 
 .post_bot{

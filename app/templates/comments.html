@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="spacer"></div>
+    <div class="row d-flex justify-content-center" style="border: #212121 solid 5px; padding: 2vw 3vw">
+        <div class="col-12 text-center">
+            <h3 class="title text-light" style="font-size: 3.3vw;">Комментарии</h3>
+            <div class="spacer"></div>
+            <div class="box">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="notification is-danger">
+                    {{ messages[0] }}
+                </div>
+                {% endif %}
+                {% endwith %}
+                {% for comment in Comments %}
+                <div class="row justify-content-center" style="margin-bottom: 20px">
+                    <div class="col-5 fs-2">
+                        <span class="ex-post-txt dynamic-vw text-center" style="color: #4f1064">
+                            {{ Users.query.get(comment.user_id).username }}</span><br>
+                    </div>
+                    <div class="col-6"></div>
+                    {% if comment.user_id == current_user.id %}
+                    <div class="col-1">
+                        <a href="{{ url_for('delete_comment', comment_id=comment.id) }}"
+                           class="ex-btn dynamic-vw" style="text-decoration: none">-
+                        </a>
+                    </div>
+                    {% else %}
+                        <div class="col-1"></div>
+                    {% endif %}
+                    <div class="col-7 dynamic-vw text-center">
+                        <span class="ex-post-txt dynamic-vw" style="float: left">{{ comment.text }}</span><br>
+                    </div>
+                </div>
+                {% endfor %}
+                <form method="POST" action="{{ url_for('add_comment', post_id=post_id) }}">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="field">
+                                <div class="control">
+                                    <textarea class="dynamic-vw" name="text_comm" autofocus=""
+                                              autocomplete="off" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="spacer" style="margin-top: 3vh"></div>
+                    <button type="submit" class="ex-btn dynamic-vw"
+                            style="height: auto; width: auto; padding: 2vw 4vw;">Отправить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="spacer"></div>
+{% endblock %}

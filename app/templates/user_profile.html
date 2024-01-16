@@ -17,23 +17,39 @@
             </div>
             <div class="col-12 text-center">
                 {% if User.username == current_user.username %}
-                <span class="fs-1 title text-light">{{ User.username }} (Вы)</span>
+                <span class="title ex-txt" style="color: #ff00cc; font-size: 50px; word-wrap: break-word">{{ User.username }} (Вы)</span>
                 {% else %}
-                <span class="fs-1 title text-light">{{ User.username }}</span>
+                <span class="title ex-txt" style="color: #ff00cc; font-size: 50px; word-wrap: break-word">{{ User.username }}</span>
                 {% endif %}
             </div>
             <hr class="def-hr" style="width: 50%; margin-left: auto; margin-right: auto; background: #4c15ec;
-            border-color: #4c15ec; opacity: 100%">
-            <div class="col-8 text-center">
-                <span class="fs-1" id="lvl" style="color: #bbbbbb;">
-                    {{ User.level }}
-                </span>
-                <span class="text-light fs-1">
+            border-color: #4c15ec; opacity: 50%">
+            <div class="spacer" style="margin-top: 45px"></div>
+            <div class="col-12 text-center">
+                <div class="row">
+                <div class="col-6">
+                    <b class="fs-1" id="lvl" style="color: #bbbbbb; float: right; padding: 0 0 20px 0">
+                        {{ User.level }}
+                    </b>
+                </div>
+                <div class="col-6">
+                <span class="text-light fs-1" style="margin-left: 10px; float: left">
                     LvL
                 </span>
+                </div>
+                    </div>
             </div>
-            <div class="col-4">
-                <span class="ex-txt fs-1">{{ User.exp }} Ex</span>
+            <!--            <div class="col-4">-->
+            <!--                <span class="ex-txt fs-1">{{ User.exp }} Ex</span>-->
+            <!--            </div>-->
+            <div class="col-12 mt-4 text-center">
+                <div class="bar-border" style="height: 30px; width: 100%">
+                    <div class="bar" id="expValue{{ User.id }}bar" style="width: {{User.exp/(100*(User.level**2))*100 }}%"></div>
+                </div>
+                <span class="fs-3" id="expValue{{ User.id }}" style="color: #818181; margin-left: 10px">{{ User.exp }}</span>
+                <span class="fs-3" style="color: #818181">/</span>
+                <span class="fs-3" style="color: #818181">{{ (100*(User.level**2)) }}</span>
+                <span class="fs-3 ex-txt" id="ex_end"> Ex</span>
             </div>
         </div>
         <div class="spacer"></div>
@@ -62,15 +78,18 @@
                 <div class="col-12">
 
                     <img id="like_img_{{ post.id }}" class="post_bot"
-                        src="{{ url_for('static', filename='imgs/fill-like.png') if Likes[post.id]['liked_by_user'] else url_for('static', filename='imgs/like.png') }}" alt="like" width="30px"
-                        style="image-rendering: pixelated;" onclick="likePost({{ post.id }})">
+                         src="{{ url_for('static', filename='imgs/fill-like.png') if Likes[post.id]['liked_by_user'] else url_for('static', filename='imgs/like.png') }}"
+                         alt="like" width="30px"
+                         style="image-rendering: pixelated;" onclick="likePost({{ post.id }})">
                     <span id="likes_{{ post.id }}" class="text-light">{{ Likes[post.id]['count'] }}</span>
-                    <img class="post_bot" src="{{ url_for('static', filename='imgs/comment.png') }}" alt="comm"
-                        width="30px" height="32px"
-                        style="image-rendering: pixelated; margin-top: -2px; margin-left: 10px;">
+                    <a href="{{ url_for('get_comments', post_id=post.id) }}" style="text-decoration: none"> <img
+                            class="post_bot" src="{{ url_for('static', filename='imgs/comment.png') }}" alt="comm"
+                            width="30px" height="32px"
+                            style="image-rendering: pixelated; margin-top: -2px; margin-left: 10px;">
+                    </a>
                     <img class="" src="{{ url_for('static', filename='imgs/Views.png') }}" alt="views"
-                        width="30px" height="32px"
-                        style="image-rendering: pixelated; margin-top: -5px; margin-left: 10px;">
+                         width="30px" height="32px"
+                         style="image-rendering: pixelated; margin-top: -5px; margin-left: 10px;">
                 </div>
 
             </div>
@@ -81,6 +100,13 @@
 </div>
 <div class="spacer"></div>
 <script>
+
+    // Используем событие load для вызова функции при загрузке элемента
+    $(document).ready(function () {
+        console.log("gg")
+        updateExpValue({{ User.id }}, 'expValue{{ User.id }}', {{ User.level }});
+    });
+
     function likePost(postId) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '/like_post/' + postId, true);

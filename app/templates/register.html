@@ -5,7 +5,7 @@
     <div class="spacer"></div>
     <div class="row d-flex justify-content-center" style="border: #212121 solid 5px; padding: 2vw 3vw">
         <div class="col-12 text-center">
-            <h3 class="title text-light" style="font-size: 3.3vw;">Авторизация</h3>
+            <h3 class="title text-light" class="dynamic-vw">Регистрация</h3>
             <div class="spacer"></div>
             <div class="box">
                 {% with messages = get_flashed_messages() %}
@@ -19,11 +19,11 @@
                 <form method="POST" action="{{ url_for('register') }}">
                     <div class="row">
                         <div class="col-3">
-                            <p style="text-align: right; font-size: 3vw; color: #818181">Логин</p>
+                            <p class="dynamic-vw" style="text-align: right; color: #818181">Логин</p>
                             <br>
-                            <p style="text-align: right; font-size: 3vw; color: #818181">Пароль</p>
+                            <p style="text-align: right; color: #818181">Пароль</p>
                             <br>
-                            <p style="text-align: right; font-size: 3vw; color: #818181">Повторный пароль</p>
+                            <p style="text-align: right; color: #818181">Повторный пароль</p>
                         </div>
                         <div class="col-9">
                             <div class="field">
@@ -47,9 +47,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="spacer" style="margin-top: 3vw"></div>
-                    <button type="submit" class="ex-btn"
-                            style="font-size: 3vw; height: auto; width: auto; padding: 2vw 4vw">Регистрация
+                    <div class="spacer"></div>
+                    <button type="submit" class="ex-btn dynamic-vw"
+                            style=" height: auto; width: auto; padding: 2vw 4vw">Регистрация
                     </button>
                 </form>
             </div>
