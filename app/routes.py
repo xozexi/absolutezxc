@@ -4,7 +4,7 @@ import re
 from datetime import time
 from urllib.parse import urlparse, urljoin
 from functools import wraps
-from flask import render_template, redirect, url_for, request, flash, session
+from flask import render_template, redirect, url_for, request, flash, session, jsonify
 from flask_security import LoginForm
 from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
@@ -136,5 +136,50 @@ def add_post():
 @login_required
 def get_user(username):
     user = User.query.filter_by(username=username).first()
-    posts = Post.query.filter_by(user_id=user.id).all()
-    return render_template('user_profile.html', User=user, Posts=posts)
+    posts = Post.query.filter_by(user_id=user.id).order_by(Post.id.desc()).all()
+    
+    likes = {}
+    for post in posts:
+        liked_by_user = False
+        print(Like.query.filter_by(user_id=current_user.id, post_id=post.id).first())
+        if Like.query.filter_by(user_id=current_user.id, post_id=post.id).first():
+            liked_by_user = True
+        likes[post.id] = {
+            'count': get_post_likes(post.id),
+            'liked_by_user': liked_by_user
+        }
+        print(likes[post.id])
+
+    return render_template('user_profile.html', User=user, Posts=posts, Likes=likes)
+
+
+@app.route('/like_post/<int:post_id>/')
+@login_required
+def like_post(post_id):
+    try:
+        existing_like = Like.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+
+        if existing_like:
+            db.session.delete(existing_like)
+            is_like_set = False
+        else:
+            new_like = Like(user_id=current_user.id, post_id=post_id)
+            db.session.add(new_like)
+            is_like_set = True
+
+        db.session.commit()
+
+        # Получаем новое количество лайков
+        updated_likes_count = Like.query.filter_by(post_id=post_id).count()
+
+        return jsonify({'likes_count': updated_likes_count, 'is_like_set': is_like_set}), 200
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return '', 500
+
+def get_post_likes(post_id):
+    try:
+        post_likes = Like.query.filter_by(post_id=post_id).count()
+        return post_likes
+    except Exception as e:
+        return -1

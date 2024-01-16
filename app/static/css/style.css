@@ -46,7 +46,16 @@ input[type="email"], input[type="password"], input[type="text"], textarea {
     border: #5500e1 solid 3px;
     outline: none;
     color: #5500e1;
-!important;
+}
+
+.post_bot{
+    transition: .5s;
+    border-bottom: 3px solid transparent;
+}
+
+.post_bot:hover{
+    transition: .5s;
+    border-bottom: 3px solid #5500e1;
 }
 
 /* Скрыть стандартные полосы прокрутки */

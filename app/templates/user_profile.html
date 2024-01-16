@@ -5,6 +5,16 @@
     <div class="spacer"></div>
     <div class="row d-flex justify-content-center" style="border: #212121 solid 5px; padding: 2vw 3vw">
         <div class="row">
+            <div class="col-4 text-center">
+                {% if User.username == current_user.username %}
+                <a class="nav-link text-center" href="{{ url_for('logout') }}">
+                    <div class="a-link">
+                        <span class="fs-3">выйти</span>
+                    </div>
+                </a>
+                <div class="spacer"></div>
+                {% endif %}
+            </div>
             <div class="col-12 text-center">
                 {% if User.username == current_user.username %}
                 <span class="fs-1 title text-light">{{ User.username }} (Вы)</span>
@@ -16,7 +26,7 @@
             border-color: #4c15ec; opacity: 100%">
             <div class="col-8 text-center">
                 <span class="fs-1" id="lvl" style="color: #bbbbbb;">
-                    {{  User.level }}
+                    {{ User.level }}
                 </span>
                 <span class="text-light fs-1">
                     LvL
@@ -40,15 +50,67 @@
         {% endif %}
         <hr class="def-hr">
         {% if Posts|count == 0 %}
-            <span class="ex-post-txt fs-4">Э. А где?</span>
+        <span class="ex-post-txt fs-4">Э. А где?</span>
         {% endif %}
         {% for post in Posts %}
         <div class="row">
-            <span class="ex-title fs-2">{{ post.title }}</span><br>
-            <span class="ex-post-txt fs-4">{{ post.content }}</span><br>
+            <div class="col-12">
+                <span class="ex-title fs-2">{{ post.title }}</span><br>
+                <span class="ex-post-txt fs-4">{{ post.content }}</span><br>
+            </div>
+            <div class="row">
+                <div class="col-12">
+
+                    <img id="like_img_{{ post.id }}" class="post_bot"
+                        src="{{ url_for('static', filename='imgs/fill-like.png') if Likes[post.id]['liked_by_user'] else url_for('static', filename='imgs/like.png') }}" alt="like" width="30px"
+                        style="image-rendering: pixelated;" onclick="likePost({{ post.id }})">
+                    <span id="likes_{{ post.id }}" class="text-light">{{ Likes[post.id]['count'] }}</span>
+                    <img class="post_bot" src="{{ url_for('static', filename='imgs/comment.png') }}" alt="comm"
+                        width="30px" height="32px"
+                        style="image-rendering: pixelated; margin-top: -2px; margin-left: 10px;">
+                    <img class="" src="{{ url_for('static', filename='imgs/Views.png') }}" alt="views"
+                        width="30px" height="32px"
+                        style="image-rendering: pixelated; margin-top: -5px; margin-left: 10px;">
+                </div>
+
+            </div>
         </div>
+        <div class="spacer" style="margin-top: 50px;"></div>
         {% endfor %}
     </div>
 </div>
 <div class="spacer"></div>
+<script>
+    function likePost(postId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/like_post/' + postId, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+
+                    // Обновляем количество лайков в DOM
+                    var likesSpan = document.getElementById('likes_' + postId);
+                    if (likesSpan) {
+                        likesSpan.innerHTML = response.likes_count;
+                    }
+
+                    // Обновляем изображение лайка в DOM
+                    var likeImage = document.getElementById('like_img_' + postId);
+                    if (likeImage) {
+                        if (response.is_like_set) {
+                            likeImage.src = '/static/imgs/fill-like.png'; // Путь к изображению, которое показывает, что лайк поставлен
+                        } else {
+                            likeImage.src = '/static/imgs/like.png'; // Путь к изображению лайка по умолчанию
+                        }
+                    }
+                } else {
+                    console.error('Произошла ошибка при добавлении лайка. Код состояния:', xhr.status);
+                }
+            }
+        };
+        xhr.send();
+    }
+
+</script>
 {% endblock %}

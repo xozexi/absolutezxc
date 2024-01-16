@@ -10,20 +10,24 @@
         </div>
 
         {% for user in users %}
-        <a href="{{ url_for('get_user', username=user.username) }}" class="col-12 text-center" style="text-decoration: none;">
-        <div class="col-12 text-center user-list d-flex justify-content-left">
-               <span class="text-light fs-3" > {{ user.username }}</span>
-            <span class="text-light fs-3" style="height: 40px; min-width: 40px; margin-left: 20px; color: #bbbbbb; box-shadow: 0px 0px 0px 5px #5500e1">{{ user.level }}</span>
-            <div class="bar-border" style="margin-left: 20px; height: 30px; width: 40%">
-                <div class="bar" style="width: {{user.exp/(100*(user.level**2))*100 }}%"></div>
+        {% if user.id != current_user.id %}
+        <a href="{{ url_for('get_user', username=user.username) }}" class="col-12 text-center"
+            style="text-decoration: none;">
+            <div class="col-12 text-center user-list d-flex justify-content-left">
+                <span class="text-light fs-3"> {{ user.username }}</span>
+                <span class="text-light fs-3"
+                    style="height: 40px; min-width: 40px; margin-left: 20px; color: #bbbbbb; box-shadow: 0px 0px 0px 5px #5500e1">{{
+                    user.level }}</span>
+                <div class="bar-border" style="margin-left: 20px; height: 30px; width: 40%">
+                    <div class="bar" style="width: {{user.exp/(100*(user.level**2))*100 }}%"></div>
+                </div>
+                <span class="fs-3" style="color: #818181; margin-left: 10px">{{ user.exp }}</span>
+                <span class="fs-3" style="color: #818181">/</span>
+                <span class="fs-3" style="color: #818181">{{ (100*(user.level**2)) }}</span>
+                <span class="fs-3 ex-txt" id="ex_end"> Ex</span>
             </div>
-            <span class="fs-3" style="color: #818181; margin-left: 10px">{{ user.exp }}</span>
-            <span class="fs-3" style="color: #818181">/</span>
-            <span class="fs-3" style="color: #818181">{{ (100*(user.level**2)) }}</span>
-            <span class="fs-3 ex-txt" id="ex_end"> Ex</span>
-
-        </div>
         </a>
+        {% endif %}
         {% endfor %}
 
     </div>
