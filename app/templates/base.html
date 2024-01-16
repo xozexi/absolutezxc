@@ -36,18 +36,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('users') }}">Пользователи</a>
                     </li>
-                    <li class="nav-item ml-auto">
+                    <!-- <li class="nav-item ml-auto">
                         <a class="nav-link" href="#">GG</a>
-                    </li>
+                    </li> -->
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
 
-                            <a class="nav-link" style="justify-content: flex-end;" href="">
+                            <!-- <a class="nav-link" style="justify-content: flex-end;" href="">
                                 <div class="mini-prof">
                                 <span>+</span>
                                     </div>
-                            </a>
-
+                            </a> -->
+                            <a class="nav-link" href="{{ url_for('get_user', username = current_user.username) }}">Профиль</a>
 
                     </li>
                     {% else %}
