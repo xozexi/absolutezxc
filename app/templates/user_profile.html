@@ -87,9 +87,11 @@
                             width="30px" height="32px"
                             style="image-rendering: pixelated; margin-top: -2px; margin-left: 10px;">
                     </a>
-                    <img class="" src="{{ url_for('static', filename='imgs/Views.png') }}" alt="views"
+                    <span class="text-light">{{ Likes[post.id]['comm_count'] }}</span>
+                    <img class="post" data-post-id="{{ post.id }}" src="{{ url_for('static', filename='imgs/Views.png') }}" alt="views"
                          width="30px" height="32px"
                          style="image-rendering: pixelated; margin-top: -5px; margin-left: 10px;">
+                         <span class="text-light">{{ post.views }}</span>
                 </div>
 
             </div>
@@ -137,6 +139,44 @@
         };
         xhr.send();
     }
+document.addEventListener('DOMContentLoaded', function() {
+    var posts = document.querySelectorAll('.post');
+    var viewedPosts = [];
 
+    function isElementInViewport(el) {
+        var rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+        );
+    }
+
+    function increaseViews(postId) {
+        // Проверяем, был ли пост уже просмотрен в текущей сессии
+        if (viewedPosts.indexOf(postId) === -1) {
+            // AJAX-запрос для увеличения просмотров на сервере
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/increase_views/' + postId, true);
+            xhr.send();
+
+            // Записываем пост в массив просмотренных
+            viewedPosts.push(postId);
+        }
+    }
+
+    function handleScroll() {
+        posts.forEach(function(post) {
+            var postId = post.dataset.postId;
+
+            if (isElementInViewport(post)) {
+                increaseViews(postId);
+            }
+        });
+    }
+
+    // Отслеживание события прокрутки
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();  // Вызов при загрузке страницы
+});
 </script>
 {% endblock %}

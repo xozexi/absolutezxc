@@ -48,6 +48,7 @@ class Post(db.Model):
     content = db.Column(db.Text)
     pub_date = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    views = db.Column(db.Integer, default=0)
     user = db.relationship('User', backref=db.backref('posts', lazy='dynamic'))
 
 

@@ -146,7 +146,8 @@ def get_user(username):
             liked_by_user = True
         likes[post.id] = {
             'count': get_post_likes(post.id),
-            'liked_by_user': liked_by_user
+            'liked_by_user': liked_by_user,
+            'comm_count': get_post_comm_count(post.id)
         }
         print(likes[post.id])
 
@@ -195,6 +196,7 @@ def add_comment(post_id):
                               user_id=current_user.id,
                               post_id=post_id,
                               pub_date=datetime.datetime.now())
+        User.query.get(Post.query.get(post_id).user_id).exp += 5
         db.session.add(new_comment)
         db.session.commit()
         flash("")
@@ -239,3 +241,17 @@ def get_post_likes(post_id):
         return post_likes
     except Exception as e:
         return -1
+
+def get_post_comm_count(post_id):
+    try:
+        comm = Comment.query.filter_by(post_id=post_id).count()
+        return comm
+    except Exception as e:
+        return -1
+    
+@app.route('/increase_views/<int:post_id>')
+def increase_views(post_id):
+    post = Post.query.get_or_404(post_id)
+    post.views += 1
+    db.session.commit()
+    return jsonify({'views': post.views})
