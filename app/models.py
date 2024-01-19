@@ -40,6 +40,21 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return str(self.id)
 
+    def follow(self, user):
+        if not self.is_following(user):
+            subscription = Subscription(follower=self, followed=user)
+            db.session.add(subscription)
+            db.session.commit()
+
+    def unfollow(self, user):
+        subscription = Subscription.query.filter_by(follower=self, followed=user).first()
+        if subscription:
+            db.session.delete(subscription)
+            db.session.commit()
+
+    def is_following(self, user):
+        return Subscription.query.filter_by(follower=self, followed=user).first() is not None
+
 # Модель для постов
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -48,7 +63,19 @@ class Post(db.Model):
     content = db.Column(db.Text)
     pub_date = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    views = db.Column(db.Integer, default=0)
     user = db.relationship('User', backref=db.backref('posts', lazy='dynamic'))
+
+
+class Subscription(db.Model):
+    __tablename__ = 'subscriptions'
+    id = db.Column(db.Integer, primary_key=True)
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow())
+
+    follower = db.relationship('User', foreign_keys=[follower_id], backref=db.backref('following', lazy='dynamic'))
+    followed = db.relationship('User', foreign_keys=[followed_id], backref=db.backref('followers', lazy='dynamic'))
 
 
 # Модель для комментариев

@@ -17,11 +17,41 @@ from wtforms.validators import DataRequired, Email, EqualTo
 
 from app.settings import app
 from flask_login import login_user, current_user, logout_user, login_required
-from app.models import db, User, Role, Post, Comment, Like
+from app.models import db, User, Role, Post, Comment, Like, Subscription
 
 
 @app.route('/')
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('feed'))
+    else:
+        return redirect(url_for('hello'))
+
+
+@app.route('/feed')
+@login_required
+def feed():
+    followed_posts = (
+        Post.query.join(Subscription, (Subscription.followed_id == Post.user_id))
+        .filter(Subscription.follower_id == current_user.id)
+        .order_by(Post.pub_date.desc())
+        .all()
+    )
+    likes = {}
+    for post in followed_posts:
+        liked_by_user = False
+        print(Like.query.filter_by(user_id=current_user.id, post_id=post.id).first())
+        if Like.query.filter_by(user_id=current_user.id, post_id=post.id).first():
+            liked_by_user = True
+        likes[post.id] = {
+            'count': get_post_likes(post.id),
+            'liked_by_user': liked_by_user,
+            'comm_count': get_post_comm_count(post.id)
+        }
+    return render_template('feed.html', posts=followed_posts, Likes=likes)
+
+@app.route('/hello')
+def hello():
     return render_template('index.html')
 
 
@@ -146,12 +176,28 @@ def get_user(username):
             liked_by_user = True
         likes[post.id] = {
             'count': get_post_likes(post.id),
-            'liked_by_user': liked_by_user
+            'liked_by_user': liked_by_user,
+            'comm_count': get_post_comm_count(post.id),
         }
-        print(likes[post.id])
 
     return render_template('user_profile.html', User=user, Posts=posts, Likes=likes)
 
+@app.route('/follow/<string:username>')
+@login_required
+def follow(username):
+    user_to_follow = User.query.filter_by(username=username).first()
+    current_user.follow(user_to_follow)
+    db.session.commit()
+    return redirect(url_for('get_user', username=user_to_follow.username))
+
+
+@app.route('/unfollow/<string:username>')
+@login_required
+def unfollow(username):
+    user_to_unfollow = User.query.filter_by(username=username).first()
+    current_user.unfollow(user_to_unfollow)
+    db.session.commit()
+    return redirect(url_for('get_user', username=user_to_unfollow.username))
 
 @app.route('/like_post/<int:post_id>/')
 @login_required
@@ -162,12 +208,12 @@ def like_post(post_id):
         if existing_like:
             db.session.delete(existing_like)
             is_like_set = False
-            User.query.get(Post.query.get(post_id).user_id).exp -= 1
+            change_exp(Post.query.get(post_id).user_id, -1)
         else:
             new_like = Like(user_id=current_user.id, post_id=post_id)
             db.session.add(new_like)
             is_like_set = True
-            User.query.get(Post.query.get(post_id).user_id).exp += 1
+            change_exp(Post.query.get(post_id).user_id, 1)
 
         db.session.commit()
 
@@ -195,6 +241,7 @@ def add_comment(post_id):
                               user_id=current_user.id,
                               post_id=post_id,
                               pub_date=datetime.datetime.now())
+        change_exp(Post.query.get(post_id).user_id, 5)
         db.session.add(new_comment)
         db.session.commit()
         flash("")
@@ -208,6 +255,7 @@ def add_comment(post_id):
 @login_required
 def delete_comment(comment_id):
     try:
+        change_exp(Post.query.get(comment_id.post_id.user_id).user_id, 5)
         comment = Comment.query.get(comment_id)
         db.session.delete(comment)
         db.session.commit()
@@ -225,9 +273,6 @@ def get_exp():
 
         # Находим пользователя по id в базе данных
         user = User.query.get(user_id)
-
-        # Возвращаем значение exp в формате JSON
-        print(user.exp)
         return jsonify({'exp': user.exp})
     except Exception as e:
         return jsonify({'error': str(e)})
@@ -239,3 +284,44 @@ def get_post_likes(post_id):
         return post_likes
     except Exception as e:
         return -1
+
+
+def get_post_comm_count(post_id):
+    try:
+        comm = Comment.query.filter_by(post_id=post_id).count()
+        return comm
+    except Exception as e:
+        return -1
+
+
+@app.route('/increase_views/<int:post_id>')
+def increase_views(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.views is None:
+        post.views = 0
+    post.views += 1
+    db.session.commit()
+    return jsonify({'views': post.views})
+
+
+def change_exp(user_id, exp):
+    user = User.query.get(user_id)
+    user.exp += exp
+    if user.exp >= 100 * pow(user.level, 2):
+        user.level += 1
+    db.session.commit()
+
+
+@app.route('/changexp', methods=['POST'])
+def changexp():
+    username = request.form.get('id')
+    exp = request.form.get('exp')
+
+    user = User.query.filter_by(username=username).first()
+    print(user.username)
+    if user:
+        change_exp(user.id, int(exp))
+        return jsonify({'status': 'success',
+                        'message': f'Изменения внесены для пользователя с ID {user.id}. Теперь опыт: {user.exp}, уровень: {user.level}'})
+    else:
+        return jsonify({'status': 'error', 'message': f'Пользователь с ID {user.id} не найден.'})

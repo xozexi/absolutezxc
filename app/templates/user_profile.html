@@ -15,11 +15,24 @@
                 <div class="spacer"></div>
                 {% endif %}
             </div>
-            <div class="col-12 text-center">
+            <div class="col-12 text-center justify-content-center">
                 {% if User.username == current_user.username %}
-                <span class="title ex-txt" style="color: #ff00cc; font-size: 50px; word-wrap: break-word">{{ User.username }} (Вы)</span>
+                <p class="title ex-txt" style="color: #ff00cc; font-size: 50px; word-wrap: break-word">{{ User.username }} (Вы)</p>
                 {% else %}
                 <span class="title ex-txt" style="color: #ff00cc; font-size: 50px; word-wrap: break-word">{{ User.username }}</span>
+                {% if current_user.is_following(User) %}
+                <a class="nav-link def-link" href="{{ url_for('unfollow', username=User.username) }}">
+                    <div class="a-link fs-5" style="width: 50%; margin-left: auto; margin-right: auto">
+                        Отписаться
+                    </div>
+                </a>
+                {% else %}
+                <a class="nav-link def-link" href="{{ url_for('follow', username=User.username) }}">
+                    <div class="a-link fs-5 col-12" style="width: 50%; margin-left: auto; margin-right: auto">
+                        Подписаться
+                    </div>
+                </a>
+                {% endif %}
                 {% endif %}
             </div>
             <hr class="def-hr" style="width: 50%; margin-left: auto; margin-right: auto; background: #4c15ec;
@@ -48,7 +61,7 @@
                 </div>
                 <span class="fs-3" id="expValue{{ User.id }}" style="color: #818181; margin-left: 10px">{{ User.exp }}</span>
                 <span class="fs-3" style="color: #818181">/</span>
-                <span class="fs-3" style="color: #818181">{{ (100*(User.level**2)) }}</span>
+                <span class="fs-3" id="endExp" style="color: #818181">{{ (100*(User.level**2)) }}</span>
                 <span class="fs-3 ex-txt" id="ex_end"> Ex</span>
             </div>
         </div>
@@ -69,7 +82,7 @@
         <span class="ex-post-txt fs-4">Э. А где?</span>
         {% endif %}
         {% for post in Posts %}
-        <div class="row">
+        <div class="row post-list">
             <div class="col-12">
                 <span class="ex-title fs-2">{{ post.title }}</span><br>
                 <span class="ex-post-txt fs-4">{{ post.content }}</span><br>
@@ -87,9 +100,11 @@
                             width="30px" height="32px"
                             style="image-rendering: pixelated; margin-top: -2px; margin-left: 10px;">
                     </a>
-                    <img class="" src="{{ url_for('static', filename='imgs/Views.png') }}" alt="views"
+                    <span class="text-light">{{ Likes[post.id]['comm_count'] }}</span>
+                    <img class="post" data-post-id="{{ post.id }}" src="{{ url_for('static', filename='imgs/Views.png') }}" alt="views"
                          width="30px" height="32px"
                          style="image-rendering: pixelated; margin-top: -5px; margin-left: 10px;">
+                         <span class="text-light">{{ post.views }}</span>
                 </div>
 
             </div>
@@ -103,7 +118,6 @@
 
     // Используем событие load для вызова функции при загрузке элемента
     $(document).ready(function () {
-        console.log("gg")
         updateExpValue({{ User.id }}, 'expValue{{ User.id }}', {{ User.level }});
     });
 
@@ -137,6 +151,59 @@
         };
         xhr.send();
     }
+document.addEventListener('DOMContentLoaded', function() {
+    var posts = document.querySelectorAll('.post');
+    var viewedPosts = [];
+
+    function isElementInViewport(el) {
+        var rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+        );
+    }
+
+    function increaseViews(postId) {
+        // Проверяем, был ли пост уже просмотрен в текущей сессии
+        if (viewedPosts.indexOf(postId) === -1) {
+            // AJAX-запрос для увеличения просмотров на сервере
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/increase_views/' + postId, true);
+            xhr.send();
+
+            // Записываем пост в массив просмотренных
+            viewedPosts.push(postId);
+        }
+    }
+
+    function handleScroll() {
+        posts.forEach(function(post) {
+            var postId = post.dataset.postId;
+
+            if (isElementInViewport(post)) {
+                increaseViews(postId);
+            }
+        });
+    }
+
+    // Отслеживание события прокрутки
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();  // Вызов при загрузке страницы
+});
+
+function changexp(id, exp) {
+    // Создаем объект FormData, если у вас есть данные для отправки
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('exp', exp);
+
+    // Используем Fetch для отправки POST-запроса
+    fetch('/changexp', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+}
 
 </script>
 {% endblock %}

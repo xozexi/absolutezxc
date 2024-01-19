@@ -98,7 +98,10 @@ if (window.location.pathname === "/") {
             .then(function (expValue) {
                 $('#' + DOMElementID).text(expValue);
                 $('#' + DOMElementID + 'bar').width(expValue/(100*(userLvl**2))*100 +'%');
-                // Дальнейшая обработка значения expValue
+                if (expValue > 100*(userLvl**2)) {
+
+                    location.reload();
+                }
             })
             .catch(function (error) {
             });
@@ -123,3 +126,4 @@ function getExpValueFromServer(userId) {
         });
     });
 }
+

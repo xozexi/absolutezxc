@@ -140,6 +140,20 @@ body {
     box-shadow: 5px 5px 0px 2px #0c0c0c;
 }
 
+.post-list {
+    padding: 20px 20px;
+  margin: 2em auto;
+  box-shadow:   -5px 0 0 0 #5500e1,
+                 5px 0 0 0 #5500e1,
+                 0 -5px 0 0 #5500e1,
+                 0 5px 0 0 #5500e1;
+    transition: .5s;
+}
+
+.post-list:hover {
+    box-shadow: 0 0 0 5px #5500e1;
+}
+
 
 .mini-prof {
     text-align: center;
