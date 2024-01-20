@@ -1,0 +1,21 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Admin Example</title>
+    <!-- Включаем стили Plotly (если необходимо) -->
+    {{ graph_html_level|safe }}
+    {{ graph_html_activity|safe }}
+    {{ graph_html_bar|safe }}
+    {{ graph_html_pie|safe }}
+    {{ graph_html_combined|safe }}
+</head>
+<body>
+    <h1>Plotly Charts Example</h1>
+</body>
+</html>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}

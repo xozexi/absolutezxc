@@ -70,9 +70,9 @@
 </main>
 
 <footer class="py-3 mt-4" style="color: rgba(255,255,255,0.55)">
-<!--    <ul class="nav justify-content-center border-bottom pb-3 mb-3">-->
-<!--        <li class="nav-item"><button id="dangerous-button" class="nav-link px-2">)</button></li>-->
-<!--    </ul>-->
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><button id="dangerous-button" class="nav-link px-2" onclick="info()">info</button></li>
+    </ul>
     <a href="{{ url_for('index') }}" class="d-flex justify-content-center">
         <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="LOGO" width="50px">
     </a>
@@ -88,5 +88,11 @@
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 <!-- <script href="{{ url_for('static', filename='js/bootstrap.esm.js') }}"/>-->
 <!-- <script href="{{ url_for('static', filename='js/bootstrap.js') }}"/>-->
+<script>
+    function info(){
+        alert("Данное веб приложение было разработано Бобковым Вячеславом Геннадьевичем, группы 26-п. Данный" +
+            "сайт предназначен для курсового проекта по \'БДиСУБД\'. Все права защищены лично мной.");
+    }
+</script>
 </body>
 </html>

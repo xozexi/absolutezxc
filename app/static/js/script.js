@@ -74,7 +74,7 @@ function animateNumber(targetValue) {
 
 // Вызовите функцию с целевым значением (например, 100)
 animateNumber(100);
-if (window.location.pathname === "/") {
+if (window.location.pathname === "/hello") {
     animateBar();
     animateLvl();
 }
