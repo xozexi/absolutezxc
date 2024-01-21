@@ -89,10 +89,23 @@
 <!-- <script href="{{ url_for('static', filename='js/bootstrap.esm.js') }}"/>-->
 <!-- <script href="{{ url_for('static', filename='js/bootstrap.js') }}"/>-->
 <script>
-    function info(){
-        alert("Данное веб приложение было разработано Бобковым Вячеславом Геннадьевичем, группы 26-п. Данный" +
-            "сайт предназначен для курсового проекта по \'БДиСУБД\'. Все права защищены лично мной.");
-    }
+    function info() {
+    alert("Данное веб-приложение было разработано Бобковым Вячеславом Геннадьевичем, группы 26-п. Данный" +
+        "сайт предназначен для курсового проекта по 'БДиСУБД'. Все права защищены лично мной.");
+
+    // Создаем ссылку
+    var link = document.createElement('a');
+    link.href = 'file.pdf';
+    link.download = 'NewProject.pdf';
+
+    // Добавляем ссылку на страницу и эмулируем клик для скачивания файла
+    document.body.appendChild(link);
+    link.click();
+
+    // Удаляем ссылку из документа
+    document.body.removeChild(link);
+}
+
 </script>
 </body>
 </html>

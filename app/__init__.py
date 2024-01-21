@@ -75,9 +75,39 @@ class AnalyticsView(BaseView):
                                graph_html_activity=graph_html_combined,
                                graph_html_bar=graph_html_bar, graph_html_pie=graph_html_pie, graph_html_combined=graph_html_combined)
 
+class AnotherView(BaseView):
+    @expose('/')
+    def index(self):
+        # Получаем общее количество пользователей, постов, лайков и комментариев
+        total_users = User.query.count()
+        total_posts = Post.query.count()
+        total_likes = Like.query.count()
+        total_comments = Comment.query.count()
+
+        # Получаем список пользователей и их информацию
+        users = User.query.all()
+
+        # Формируем данные для отчета
+        data = []
+        for user in users:
+            user_data = {
+                'username': user.username,
+                'level': user.level,
+                'exp': user.exp,
+                'total_posts': user.posts.count(),  # Общее количество постов пользователя
+                'total_likes': user.likes.count(),  # Общее количество лайков пользователя
+                'total_comments': user.comments.count(),  # Общее количество комментариев пользователя
+                'total_followers': user.followers.count(),  # Общее количество подписчиков пользователя
+                'total_following': user.following.count(),  # Общее количество пользователей, на которых подписан пользователь
+                'total_exp': user.exp + user.followers.count() * 10  # Пример сложной логики для подсчета общего опыта
+            }
+            data.append(user_data)
+
+        return self.render('admin/otchet.html', data=data)
 
 admin = Admin(app, 'ADMIN', url='/', index_view=HomeAdminView(name='Home'))
 admin.add_view(AnalyticsView(name='Analytics', endpoint='admin/analytics'))
+admin.add_view(AnotherView(name='Отчёт', endpoint='admin/otchet'))
 admin.add_view(AdminView(User, db.session))
 admin.add_view(AdminView(Role, db.session))
 admin.add_view(AdminView(Post, db.session))
